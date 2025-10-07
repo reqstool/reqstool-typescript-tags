@@ -10,8 +10,8 @@
     },
     "scripts": {
         "build": "tsc --project tsconfig.build.json",
-        "lint": "eslint --fix '{src,tests/unit}/**/*.{js,ts}'",
-        "format": "prettier --write '**/*.{js,ts,json,md}'",
+        "lint": "eslint '{src,tests/unit}/**/*.{js,ts}'",
+        "format": "prettier --check '**/*.{js,ts,json,md}'",
         "test": "vitest",
         "dev": "NODE_NO_WARNINGS=1 node --loader ts-node/esm ./src/index.ts "
     },
