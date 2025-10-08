@@ -48,6 +48,6 @@ jobs:
     steps:
 
       - name: Print variables
-        run: echo "$GITHUB_CONTEXT"
+        run: echo ${{ github.ref }} ${{ github.event_name }} ${{ github.event.base_ref }}
       - name: List files
         run: ls -al
