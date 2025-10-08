@@ -138,9 +138,7 @@ function firstArgStringLiteral(node: ts.Node) {
 }
 
 function getNodeName(node: ts.Node) {
-    if (isNamedDeclaration(node)) {
-        return node.name?.getText() ?? 'undefined'
-    }
+    return (isNamedDeclaration(node) && node.name?.getText()) || 'undefined'
 }
 
 function isNamedDeclaration(node: ts.Node): node is ts.NamedDeclaration {
