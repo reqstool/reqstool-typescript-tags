@@ -39,3 +39,11 @@ jobs:
 
       - name: Build project
         run: npm run build
+
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event.base_ref == 'refs/heads/2-add-workflow-for-tesing-building-and-publishing-package'
+    steps:
+
+      - name: List files
+        run: ls -al
