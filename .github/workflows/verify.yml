@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - '**'   # all branches
-  workflow_call:
+    tags:
+      - 'v*'
     
 
 jobs:
@@ -42,8 +43,11 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    if: github.event.base_ref == 'refs/heads/2-add-workflow-for-tesing-building-and-publishing-package'
+    needs: build-and-test
+    # if: github.event.base_ref == 'refs/heads/2-add-workflow-for-tesing-building-and-publishing-package'
     steps:
 
+      - name: Print variables
+        run: echo "$GITHUB_CONTEXT"
       - name: List files
         run: ls -al
