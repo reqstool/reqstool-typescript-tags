@@ -16,8 +16,9 @@ jobs:
     steps:
       - name: Check branch
         run: |
+          echo "${{ github.event.base_ref }}"
           if [ "${{ github.event.base_ref }}" != "refs/head/main" ]; then
-            echo "Not on main branch!"
+            echo "Tag must be on main branch!"
             exit 1
           fi
       - name: Checkout
