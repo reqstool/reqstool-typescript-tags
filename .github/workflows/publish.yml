@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - 'v*'
-    
 
 jobs:
   verify:
@@ -16,7 +15,6 @@ jobs:
     steps:
       - name: Check branch
         run: |
-          echo "${{ github.event.base_ref }}"
           if [ "${{ github.event.base_ref }}" != "refs/head/main" ]; then
             echo "Tag must be on main branch!"
             exit 1
@@ -35,10 +33,7 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Testing publish
-        run: ls -al
-
-      # - name: Publish
-      #   run: npm publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
