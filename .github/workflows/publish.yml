@@ -1,9 +1,8 @@
 name: Publish
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [created]
 
 jobs:
   verify:
@@ -15,7 +14,7 @@ jobs:
     steps:
       - name: Check branch
         run: |
-          if [ "${{ github.event.base_ref }}" != "refs/head/main" ]; then
+          if [ "${{ github.event.release.target_commitish }}" != "main" ]; then
             echo "Tag must be on main branch!"
             exit 1
           fi
