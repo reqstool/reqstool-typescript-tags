@@ -13,9 +13,14 @@ jobs:
     needs: verify
     steps:
       - name: Check branch
+        shell: bash
         run: |
           if [ "${{ github.event.release.target_commitish }}" != "main" ]; then
-            echo "Tag must be on main branch!"
+            echo "Release must be on main branch!"
+            exit 1
+          fi
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "Tag must start with 'v'"
             exit 1
           fi
       - name: Checkout
