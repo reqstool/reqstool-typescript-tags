@@ -15,12 +15,12 @@ jobs:
       - name: Check branch
         shell: bash
         run: |
-          if [[ "${{ github.ref }}" != refs/tags/v* ]]; then
-            echo "Tag must start with 'v'"
-            exit 1
-          fi
           if [ "${{ github.event.release.target_commitish }}" != "main" ]; then
             echo "Release must be on main branch!"
+            exit 1
+          fi
+          if [[ "${{ github.ref }}" != refs/tags/v* ]]; then
+            echo "Tag must start with 'v'"
             exit 1
           fi
       - name: Checkout
@@ -37,7 +37,7 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # - name: Publish
-      #   run: npm publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
