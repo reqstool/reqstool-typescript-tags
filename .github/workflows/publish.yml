@@ -23,6 +23,8 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+          scope: "@lfv.se"       
 
       - name: Install dependencies
         run: npm ci
