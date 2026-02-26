@@ -7,7 +7,7 @@ import { NodeWalker } from './NodeWalker.js'
 
 export class TagsProcessor {
     yamlLanguageServer =
-        '# yaml-language-server: $schema=https://raw.githubusercontent.com/Luftfartsverket/reqstool-client/main/src/reqstool/resources/schemas/v1/annotations.schema.json'
+        '# yaml-language-server: $schema=https://raw.githubusercontent.com/reqstool/reqstool-client/main/src/reqstool/resources/schemas/v1/annotations.schema.json'
 
     tagsToSearch = ['Requirements', 'SVCs']
 
