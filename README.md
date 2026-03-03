@@ -18,7 +18,7 @@ Now you can use `reqstool-typescript-tags` script in `package.json`
     },
     "devDependencies": {
         ...
-        "@lfv.se/reqstool-typescript-tags": "0.1.0"
+        "@reqstool/reqstool-typescript-tags": "0.1.0"
     }
     ...
 }
