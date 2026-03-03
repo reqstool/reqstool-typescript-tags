@@ -19,7 +19,7 @@
         "reqstool",
         "tags processor"
     ],
-    "author": "Sysdev <sysdev@lfv.se>",
+    "author": "reqstool",
     "license": "MIT",
     "description": "Library for processing reqstool tags",
     "devDependencies": {
