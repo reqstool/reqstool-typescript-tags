@@ -1,5 +1,5 @@
 {
-    "name": "@lfv.se/reqstool-typescript-tags",
+    "name": "@reqstool/reqstool-typescript-tags",
     "version": "0.1.1",
     "type": "module",
     "files": [

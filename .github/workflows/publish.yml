@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: "24"
           registry-url: "https://registry.npmjs.org"
-          scope: "@lfv.se"       
+          scope: "@reqstool"
 
       - name: Install dependencies
         run: npm ci
