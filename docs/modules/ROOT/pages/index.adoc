@@ -1,30 +1,30 @@
-= Reqstool TypeScript Tags
+= reqstool TypeScript Tags
 
 A CLI tool that scans TypeScript and JavaScript source files for reqstool annotation tags and generates an `annotations.yml` file for consumption by the reqstool CLI.
 
-=== Features
+== Features
 
 * *TypeScript and JavaScript support*: Scans `.ts`, `.tsx`, `.js`, `.jsx` files
 * *Annotation scanning*: Finds `@Requirements` and `@SVCs` tags in source and test code
 * *Generates annotations*: Creates an `annotations.yml` compatible with reqstool
 
-=== Quick Start
+== Quick Start
 
-==== Install
+== Install
 
 [source,bash]
 ----
 npm install --save-dev @reqstool/reqstool-typescript-tags
 ----
 
-==== Default Behavior
+== Default Behavior
 
 The tool:
 
 1. Scans specified directories for annotation tags
 2. Generates an `annotations.yml` file at the specified output path
 
-==== Minimal Setup
+== Minimal Setup
 
 [source]
 ----
@@ -37,7 +37,7 @@ my-project/
 └── tests/
 ----
 
-=== Prerequisites
+== Prerequisites
 
 * Node.js
 * A `requirements.yml` file in the dataset directory
