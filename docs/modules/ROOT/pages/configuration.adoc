@@ -1,0 +1,34 @@
+== Configuration
+
+The tool is configured via CLI options. A typical setup uses an npm script in `package.json`:
+
+=== Complete Configuration Example
+
+[source,json]
+----
+{
+  "scripts": {
+    "reqstool": "reqstool-typescript-tags --inputs tests,src --output docs/reqstool/annotations.yml"
+  }
+}
+----
+
+=== Configuration Parameters
+
+==== --inputs
+
+Comma-separated list of directories to scan for annotation tags.
+
+[source,bash]
+----
+--inputs src,tests
+----
+
+==== --output
+
+Output path for the generated `annotations.yml` file.
+
+[source,bash]
+----
+--output docs/reqstool/annotations.yml
+----
