@@ -1,0 +1,28 @@
+== Usage
+
+=== Basic Usage
+
+Add an npm script to your `package.json`:
+
+[source,json]
+----
+{
+  "scripts": {
+    "reqstool": "reqstool-typescript-tags --inputs tests,src --output docs/reqstool/annotations.yml"
+  }
+}
+----
+
+=== Running
+
+[source,bash]
+----
+npm run reqstool
+----
+
+Or invoke directly:
+
+[source,bash]
+----
+npx reqstool-typescript-tags --inputs src,tests --output docs/reqstool/annotations.yml
+----

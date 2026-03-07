@@ -1,53 +1,9 @@
 = Reqstool TypeScript Tags
 
-A tool for creating reqstool `annotation.yml` files from TypeScript and JavaScript projects.
+include::description.adoc[]
 
-== Installation
+include::configuration.adoc[]
 
-Install as a dev dependency:
+include::usage.adoc[]
 
-[source,bash]
-----
-npm install --save-dev @reqstool/reqstool-typescript-tags
-----
-
-== Usage
-
-Add a script to your `package.json`:
-
-[source,json]
-----
-{
-  "scripts": {
-    "reqstool": "reqstool-typescript-tags --inputs tests,src --output docs/reqstool/annotations.yml"
-  }
-}
-----
-
-Then run:
-
-[source,bash]
-----
-npm run reqstool
-----
-
-== CLI options
-
-`--inputs`:: Comma-separated list of directories to scan for annotations (e.g., `src,tests`)
-`--output`:: Output path for the generated `annotations.yml` file
-
-== Development
-
-To test locally when contributing to this package:
-
-[source,bash]
-----
-git clone https://github.com/reqstool/reqstool-typescript-tags.git
-cd reqstool-typescript-tags
-npm install
-npm run dev -- --inputs src,tests --output output/annotations.yml
-----
-
-== License
-
-MIT License.
+include::license.adoc[]
