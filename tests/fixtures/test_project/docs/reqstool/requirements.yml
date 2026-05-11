@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/reqstool/reqstool-client/main/src/reqstool/resources/schemas/v1/requirements.schema.json
+
+metadata:
+  urn: ts-001
+  variant: microservice
+  title: Test TypeScript Package
+
+requirements:
+  - id: REQ_001
+    title: Hello function shall return hello
+    significance: shall
+    description: The hello function must return the string 'hello'.
+    revision: 0.0.1

@@ -1,0 +1,12 @@
+{
+    "name": "my-ts-package",
+    "version": "1.2.3",
+    "type": "module",
+    "reqstool": {
+        "sources": ["src", "tests"],
+        "dataset_directory": "docs/reqstool",
+        "output_directory": "build/reqstool-package",
+        "test_results": ["build/test-results/**/*.xml"],
+        "build_tool": "npm"
+    }
+}
