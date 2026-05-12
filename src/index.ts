@@ -38,24 +38,25 @@ function main() {
         .option('-n, --name <string>', 'Override the generated package name (default: <pkg-name>-reqstool)')
         .option('-v, --pkg-version <string>', 'Override the package version (default: from package.json)')
         .action(async (options) => {
-            const processor = new PackageProcessor()
-            const resolved = processor.resolveOptions({
-                inputs: options.inputs,
-                dataset: options.dataset,
-                testResults: options.testResults,
-                output: options.output,
-                buildTool: options.buildTool,
-                name: options.name,
-                pkgVersion: options.pkgVersion,
-            })
-            await processor.process(resolved)
+            try {
+                const processor = new PackageProcessor()
+                const resolved = processor.resolveOptions({
+                    inputs: options.inputs,
+                    dataset: options.dataset,
+                    testResults: options.testResults,
+                    output: options.output,
+                    buildTool: options.buildTool,
+                    name: options.name,
+                    pkgVersion: options.pkgVersion,
+                })
+                await processor.process(resolved)
+            } catch (err) {
+                console.error(`Error: ${err instanceof Error ? err.message : String(err)}`)
+                process.exit(1)
+            }
         })
 
     program.parse(process.argv)
-
-    if (process.argv.length <= 2) {
-        program.help()
-    }
 }
 
 main()

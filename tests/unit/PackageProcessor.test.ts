@@ -113,8 +113,8 @@ describe('PackageProcessor', () => {
             expect(hadResults).toBe(true)
             const testResultsDir = path.join(outDir, 'test_results')
             expect(fs.existsSync(testResultsDir)).toBe(true)
-            const files = fs.readdirSync(testResultsDir)
-            expect(files.some((f) => f.endsWith('.xml'))).toBe(true)
+            const files = fs.readdirSync(testResultsDir, { recursive: true }) as string[]
+            expect(files.some((f) => String(f).endsWith('.xml'))).toBe(true)
         })
 
         it('should return false when no files match the glob', async () => {

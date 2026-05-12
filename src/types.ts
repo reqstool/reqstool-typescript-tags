@@ -3,12 +3,14 @@ export type TagInfo = {
     tagValues: string[]
 }
 
+export type BuildTool = 'npm' | 'yarn' | 'pnpm' | 'bun'
+
 export type ReqstoolPackageConfig = {
     sources?: string[]
     dataset_directory?: string
     output_directory?: string
     test_results?: string[]
-    build_tool?: 'npm' | 'yarn' | 'pnpm' | 'bun'
+    build_tool?: BuildTool
 }
 
 export type PackageOptions = {
@@ -16,7 +18,7 @@ export type PackageOptions = {
     dataset: string
     output: string
     testResults: string[]
-    buildTool: string
+    buildTool: BuildTool
     name: string
     pkgVersion: string
 }

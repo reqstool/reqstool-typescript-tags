@@ -83,8 +83,8 @@ describe('PackageProcessor e2e', () => {
         // test results were copied
         const testResultsDir = path.join(outDir, 'test_results')
         expect(fs.existsSync(testResultsDir)).toBe(true)
-        const xmlFiles = fs.readdirSync(testResultsDir).filter((f) => f.endsWith('.xml'))
-        expect(xmlFiles.length).toBeGreaterThan(0)
+        const xmlFiles = fs.readdirSync(testResultsDir, { recursive: true }) as string[]
+        expect(xmlFiles.some((f) => String(f).endsWith('.xml'))).toBe(true)
 
         // package can be packed by npm
         const packResult = spawnSync('npm', ['pack', '--dry-run', outDir], { cwd: tmpDir, encoding: 'utf8' })
