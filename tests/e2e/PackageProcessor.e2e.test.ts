@@ -63,7 +63,7 @@ describe('PackageProcessor e2e', () => {
 
         // reqstool_config.yml is valid YAML with expected structure
         const config = yaml.load(
-            fs.readFileSync(path.join(outDir, 'reqstool_config.yml'), 'utf8').replace(/^#.*\n/, ''),
+            fs.readFileSync(path.join(outDir, 'reqstool_config.yml'), 'utf8'),
         ) as Record<string, unknown>
         expect(config.language).toBe('typescript')
         expect(config.build).toBe('npm')

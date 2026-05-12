@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
@@ -121,6 +121,127 @@ describe('PackageProcessor', () => {
             const processor = new PackageProcessor()
             const result = await processor.copyTestResults(['./nonexistent/**/*.xml'], tmpDir)
             expect(result).toBe(false)
+        })
+    })
+
+    describe('resolveOptions', () => {
+        it('should read reqstool block from package.json in cwd', () => {
+            const pkgJson = {
+                name: 'my-pkg',
+                version: '1.0.0',
+                reqstool: {
+                    sources: ['src', 'tests'],
+                    dataset_directory: 'docs/reqstool',
+                    output_directory: 'build/out',
+                    test_results: ['build/**/*.xml'],
+                    build_tool: 'yarn' as const,
+                },
+            }
+            vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(JSON.stringify(pkgJson))
+
+            const result = new PackageProcessor().resolveOptions({})
+
+            expect(result.inputs).toEqual(['src', 'tests'])
+            expect(result.dataset).toBe('docs/reqstool')
+            expect(result.output).toBe('build/out')
+            expect(result.testResults).toEqual(['build/**/*.xml'])
+            expect(result.buildTool).toBe('yarn')
+            expect(result.name).toBe('my-pkg-reqstool')
+            expect(result.pkgVersion).toBe('1.0.0')
+
+            vi.restoreAllMocks()
+        })
+
+        it('should use CLI options as overrides over package.json', () => {
+            const pkgJson = { name: 'my-pkg', version: '1.0.0', reqstool: { sources: ['src'], build_tool: 'npm' as const } }
+            vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(JSON.stringify(pkgJson))
+
+            const result = new PackageProcessor().resolveOptions({
+                inputs: ['custom-src'],
+                buildTool: 'pnpm',
+                name: 'override-name',
+            })
+
+            expect(result.inputs).toEqual(['custom-src'])
+            expect(result.buildTool).toBe('pnpm')
+            expect(result.name).toBe('override-name')
+
+            vi.restoreAllMocks()
+        })
+
+        it('should use defaults when no package.json exists', () => {
+            vi.spyOn(fs, 'readFileSync').mockImplementationOnce(() => {
+                throw Object.assign(new Error('ENOENT'), { code: 'ENOENT' })
+            })
+
+            const result = new PackageProcessor().resolveOptions({ inputs: ['src'] })
+
+            expect(result.inputs).toEqual(['src'])
+            expect(result.dataset).toBe('docs/reqstool')
+            expect(result.output).toBe('build/reqstool-package')
+            expect(result.buildTool).toBe('npm')
+
+            vi.restoreAllMocks()
+        })
+    })
+
+    describe('process', () => {
+        it('should throw when inputs is empty', async () => {
+            const processor = new PackageProcessor()
+            const options = processor.resolveOptions({ inputs: [] })
+            // force empty even if package.json provides sources
+            options.inputs = []
+
+            await expect(processor.process(options)).rejects.toThrow('No source inputs specified')
+        })
+
+        it('should write index.js shim with correct content', async () => {
+            const outDir = path.join(tmpDir, 'pkg-out')
+            const processor = new PackageProcessor()
+
+            // Minimal dataset with just requirements.yml
+            const datasetDir = path.join(tmpDir, 'dataset')
+            fs.mkdirSync(datasetDir)
+            fs.writeFileSync(path.join(datasetDir, 'requirements.yml'), 'metadata:\n  urn: test\n')
+
+            await processor.process({
+                inputs: ['tests/fixtures/test_project/src'],
+                dataset: datasetDir,
+                output: outDir,
+                testResults: [],
+                buildTool: 'npm',
+                name: 'test-reqstool',
+                pkgVersion: '0.1.0',
+            })
+
+            const shim = fs.readFileSync(path.join(outDir, 'index.js'), 'utf8')
+            expect(shim).toContain('reqstoolConfigPath')
+            expect(shim).toContain('reqstool_config.yml')
+        })
+
+        it('should skip copyTestResults when testResults is empty', async () => {
+            const outDir = path.join(tmpDir, 'pkg-out')
+            const processor = new PackageProcessor()
+            const copyTestResultsSpy = vi.spyOn(processor, 'copyTestResults')
+
+            const datasetDir = path.join(tmpDir, 'dataset')
+            fs.mkdirSync(datasetDir)
+            fs.writeFileSync(path.join(datasetDir, 'requirements.yml'), 'metadata:\n  urn: test\n')
+
+            await processor.process({
+                inputs: ['tests/fixtures/test_project/src'],
+                dataset: datasetDir,
+                output: outDir,
+                testResults: [],
+                buildTool: 'npm',
+                name: 'test-reqstool',
+                pkgVersion: '0.1.0',
+            })
+
+            expect(copyTestResultsSpy).not.toHaveBeenCalled()
+            expect(fs.existsSync(path.join(outDir, 'test_results'))).toBe(false)
+
+            vi.restoreAllMocks()
         })
     })
 })
