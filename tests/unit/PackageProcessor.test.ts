@@ -23,9 +23,10 @@ describe('PackageProcessor', () => {
         it('should include only requirements and annotations when no optional files', () => {
             const processor = new PackageProcessor()
             const copied: CopiedDatasetFiles = { hasSVCs: false, hasMVRs: false, hasTestResults: false }
-            const result = yaml.load(
-                processor.generateReqstoolConfig('npm', copied).replace(/^#.*\n/, ''),
-            ) as Record<string, unknown>
+            const result = yaml.load(processor.generateReqstoolConfig('npm', copied).replace(/^#.*\n/, '')) as Record<
+                string,
+                unknown
+            >
 
             expect(result.language).toBe('typescript')
             expect(result.build).toBe('npm')
@@ -40,9 +41,10 @@ describe('PackageProcessor', () => {
         it('should include optional files when present', () => {
             const processor = new PackageProcessor()
             const copied: CopiedDatasetFiles = { hasSVCs: true, hasMVRs: true, hasTestResults: true }
-            const result = yaml.load(
-                processor.generateReqstoolConfig('yarn', copied).replace(/^#.*\n/, ''),
-            ) as Record<string, unknown>
+            const result = yaml.load(processor.generateReqstoolConfig('yarn', copied).replace(/^#.*\n/, '')) as Record<
+                string,
+                unknown
+            >
 
             expect(result.build).toBe('yarn')
             const resources = result.resources as Record<string, unknown>
@@ -53,7 +55,11 @@ describe('PackageProcessor', () => {
 
         it('should include yaml-language-server schema comment', () => {
             const processor = new PackageProcessor()
-            const result = processor.generateReqstoolConfig('npm', { hasSVCs: false, hasMVRs: false, hasTestResults: false })
+            const result = processor.generateReqstoolConfig('npm', {
+                hasSVCs: false,
+                hasMVRs: false,
+                hasTestResults: false,
+            })
             expect(result).toMatch(/^# yaml-language-server: \$schema=/)
         })
     })
@@ -153,7 +159,11 @@ describe('PackageProcessor', () => {
         })
 
         it('should use CLI options as overrides over package.json', () => {
-            const pkgJson = { name: 'my-pkg', version: '1.0.0', reqstool: { sources: ['src'], build_tool: 'npm' as const } }
+            const pkgJson = {
+                name: 'my-pkg',
+                version: '1.0.0',
+                reqstool: { sources: ['src'], build_tool: 'npm' as const },
+            }
             vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(JSON.stringify(pkgJson))
 
             const result = new PackageProcessor().resolveOptions({

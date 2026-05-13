@@ -27,11 +27,13 @@ function main() {
         .command('package')
         .description('Assemble reqstool dataset and generate a publishable -reqstool npm package')
         .option('-i, --inputs <paths...>', 'Source directories to scan for annotations (comma separated)', (value) =>
-            value.split(','),
+            value.split(',')
         )
         .option('-d, --dataset <dir>', 'Directory containing requirements.yml and related dataset files')
-        .option('-r, --test-results <globs...>', 'Glob patterns for JUnit XML test results (comma separated)', (value) =>
-            value.split(','),
+        .option(
+            '-r, --test-results <globs...>',
+            'Glob patterns for JUnit XML test results (comma separated)',
+            (value) => value.split(',')
         )
         .option('-o, --output <dir>', 'Output directory for the assembled package')
         .option('-b, --build-tool <tool>', 'Build tool to record in reqstool_config.yml (npm|yarn|pnpm|bun)')

@@ -47,7 +47,9 @@ export class PackageProcessor {
 
     async process(options: PackageOptions): Promise<void> {
         if (options.inputs.length === 0) {
-            throw new Error('No source inputs specified. Use --inputs or set "sources" in package.json reqstool config.')
+            throw new Error(
+                'No source inputs specified. Use --inputs or set "sources" in package.json reqstool config.'
+            )
         }
 
         const outputDir = options.output

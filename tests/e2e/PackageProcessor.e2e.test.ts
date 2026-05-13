@@ -43,7 +43,7 @@ describe('PackageProcessor e2e', () => {
                 '--output',
                 'build/reqstool-package',
             ],
-            { cwd: projectDir, encoding: 'utf8' },
+            { cwd: projectDir, encoding: 'utf8' }
         )
 
         expect(result.status, `stderr: ${result.stderr}`).toBe(0)
@@ -62,9 +62,10 @@ describe('PackageProcessor e2e', () => {
         expect(annotations).toContain('SVC_001')
 
         // reqstool_config.yml is valid YAML with expected structure
-        const config = yaml.load(
-            fs.readFileSync(path.join(outDir, 'reqstool_config.yml'), 'utf8'),
-        ) as Record<string, unknown>
+        const config = yaml.load(fs.readFileSync(path.join(outDir, 'reqstool_config.yml'), 'utf8')) as Record<
+            string,
+            unknown
+        >
         expect(config.language).toBe('typescript')
         expect(config.build).toBe('npm')
         const resources = config.resources as Record<string, unknown>
@@ -98,7 +99,7 @@ describe('PackageProcessor e2e', () => {
         const result = spawnSync(
             'node',
             [CLI, 'package', '--inputs', 'src', '--dataset', emptyDataset, '--output', path.join(tmpDir, 'out')],
-            { cwd: projectDir, encoding: 'utf8' },
+            { cwd: projectDir, encoding: 'utf8' }
         )
 
         expect(result.status).not.toBe(0)
