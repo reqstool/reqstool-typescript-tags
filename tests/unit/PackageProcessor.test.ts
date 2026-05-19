@@ -71,9 +71,9 @@ describe('PackageProcessor', () => {
 
             expect(result.name).toBe('my-pkg-reqstool')
             expect(result.version).toBe('1.2.3')
-            expect(result.type).toBe('module')
-            expect(result.main).toBe('index.js')
             expect(result.files).toEqual(['*'])
+            expect(result.type).toBeUndefined()
+            expect(result.main).toBeUndefined()
         })
     })
 
@@ -205,11 +205,10 @@ describe('PackageProcessor', () => {
             await expect(processor.process(options)).rejects.toThrow('No source inputs specified')
         })
 
-        it('should write index.js shim with correct content', async () => {
+        it('should not write index.js', async () => {
             const outDir = path.join(tmpDir, 'pkg-out')
             const processor = new PackageProcessor()
 
-            // Minimal dataset with just requirements.yml
             const datasetDir = path.join(tmpDir, 'dataset')
             fs.mkdirSync(datasetDir)
             fs.writeFileSync(path.join(datasetDir, 'requirements.yml'), 'metadata:\n  urn: test\n')
@@ -224,9 +223,7 @@ describe('PackageProcessor', () => {
                 pkgVersion: '0.1.0',
             })
 
-            const shim = fs.readFileSync(path.join(outDir, 'index.js'), 'utf8')
-            expect(shim).toContain('reqstoolConfigPath')
-            expect(shim).toContain('reqstool_config.yml')
+            expect(fs.existsSync(path.join(outDir, 'index.js'))).toBe(false)
         })
 
         it('should skip copyTestResults when testResults is empty', async () => {

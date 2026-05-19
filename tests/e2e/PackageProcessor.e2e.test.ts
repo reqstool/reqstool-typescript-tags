@@ -51,7 +51,7 @@ describe('PackageProcessor e2e', () => {
         const outDir = path.join(projectDir, 'build/reqstool-package')
 
         // All expected files must exist
-        for (const file of ['reqstool_config.yml', 'package.json', 'index.js', 'requirements.yml', 'annotations.yml']) {
+        for (const file of ['reqstool_config.yml', 'package.json', 'requirements.yml', 'annotations.yml']) {
             expect(fs.existsSync(path.join(outDir, file)), `missing: ${file}`).toBe(true)
         }
         expect(fs.existsSync(path.join(outDir, 'software_verification_cases.yml'))).toBe(true)
@@ -78,8 +78,9 @@ describe('PackageProcessor e2e', () => {
         const subPkg = JSON.parse(fs.readFileSync(path.join(outDir, 'package.json'), 'utf8'))
         expect(subPkg.name).toBe('my-ts-package-reqstool')
         expect(subPkg.version).toBe('1.2.3')
-        expect(subPkg.type).toBe('module')
-        expect(subPkg.main).toBe('index.js')
+        expect(subPkg.type).toBeUndefined()
+        expect(subPkg.main).toBeUndefined()
+        expect(fs.existsSync(path.join(outDir, 'index.js'))).toBe(false)
 
         // test results were copied
         const testResultsDir = path.join(outDir, 'test_results')

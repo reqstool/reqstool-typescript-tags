@@ -70,9 +70,6 @@ export class PackageProcessor {
 
             const subPkg = this.generateSubPackageJson(options.name, options.pkgVersion)
             fs.writeFileSync(path.join(outputDir, 'package.json'), JSON.stringify(subPkg, null, 4) + '\n', 'utf8')
-
-            const shim = `import { fileURLToPath } from 'node:url';\nexport const reqstoolConfigPath = fileURLToPath(new URL('./reqstool_config.yml', import.meta.url));\n`
-            fs.writeFileSync(path.join(outputDir, 'index.js'), shim, 'utf8')
         } catch (err) {
             fs.rmSync(outputDir, { recursive: true, force: true })
             throw err
@@ -144,8 +141,6 @@ export class PackageProcessor {
         return {
             name,
             version,
-            type: 'module',
-            main: 'index.js',
             files: ['*'],
         }
     }
