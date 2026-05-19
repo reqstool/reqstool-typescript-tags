@@ -3,36 +3,35 @@ requirement_annotations:
   implementations:
     REQ001:
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.regularFunction
+        fullyQualifiedName: file.regularFunction
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.nestedArrowFunction
+        fullyQualifiedName: file.nestedArrowFunction
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.nestedFunction
+        fullyQualifiedName: file.nestedFunction
     REQ002:
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.regularFunction
+        fullyQualifiedName: file.regularFunction
       - elementKind: METHOD
-        fullyQualifiedName: >-
-          tests/data/directoryWithTsFiles/subdirectory/subdirectoryFile.tsx.functionInSubdirectoryFile
+        fullyQualifiedName: subdirectory.subdirectoryFile.functionInSubdirectoryFile
     REQ005:
       - elementKind: CLASS
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.RegularClass
+        fullyQualifiedName: file.RegularClass
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.functionInClass
+        fullyQualifiedName: file.functionInClass
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.arrowFunctionInClass
+        fullyQualifiedName: file.arrowFunctionInClass
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.asyncRegularFunction
+        fullyQualifiedName: file.asyncRegularFunction
   tests:
     SVC003:
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.arrowFunction
+        fullyQualifiedName: file.arrowFunction
     SVC0031:
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.functionFunction
+        fullyQualifiedName: file.functionFunction
     SVC004:
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.Name_of_test
+        fullyQualifiedName: file.Name_of_test
     SVC005:
       - elementKind: METHOD
-        fullyQualifiedName: tests/data/directoryWithTsFiles/file.ts.some_function_should_do_amazing_things
+        fullyQualifiedName: file.some_function_should_do_amazing_things

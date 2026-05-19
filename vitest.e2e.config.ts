@@ -8,8 +8,8 @@ export default defineConfig({
     test: {
         globals: true,
         environment: 'node',
-        include: ['tests/unit/**/*.test.ts'],
-        exclude: ['tests/fixtures/**', 'tests/e2e/**'],
+        include: ['tests/e2e/**/*.test.ts'],
+        testTimeout: 30000,
     },
     resolve: {
         alias: {

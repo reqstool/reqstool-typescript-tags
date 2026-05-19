@@ -89,10 +89,21 @@ export class TagsProcessor {
     async processTagsData(paths_to_files: string[], outputFile = 'output/annotations.yml') {
         const nodeWalker = new NodeWalker(this.tagsToSearch)
         let data: FunctionOrClassInfo[] = []
-        for (const path of paths_to_files) {
-            const files = await this.findTSFiles(path)
+        for (const inputPath of paths_to_files) {
+            const files = await this.findTSFiles(inputPath)
             for (const filePath of files) {
-                data = [...data, ...nodeWalker.walk(filePath)]
+                // Normalise to a path relative to the input directory so FQNs are
+                // portable regardless of whether the input was absolute or relative.
+                const resolvedInput = path.resolve(inputPath)
+                const resolvedFile = path.resolve(filePath)
+                const rel = path.relative(resolvedInput, resolvedFile)
+                // Strip test/spec suffix and .ts/.tsx extension, convert separators to dots.
+                // e.g. "test_svcs.test.ts" → "test_svcs", "src/utils.ts" → "src.utils"
+                const stem = rel
+                    .replace(/\.(test|spec)\.(ts|tsx)$/, '')
+                    .replace(/\.(ts|tsx)$/, '')
+                    .replace(/[/\\]/g, '.')
+                data = [...data, ...nodeWalker.walk(filePath, stem)]
             }
         }
 

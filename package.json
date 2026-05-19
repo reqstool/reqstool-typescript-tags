@@ -13,7 +13,8 @@
         "lint": "eslint '{src,tests/unit}/**/*.{js,ts}'",
         "format": "prettier --check '**/*.{js,ts,json,md}'",
         "test": "vitest run",
-        "dev": "NODE_NO_WARNINGS=1 node --loader ts-node/esm ./src/index.ts "
+        "test:e2e": "vitest run --config vitest.e2e.config.ts",
+        "dev": "NODE_NO_WARNINGS=1 node --loader ts-node/esm ./src/index.ts"
     },
     "keywords": [
         "reqstool",

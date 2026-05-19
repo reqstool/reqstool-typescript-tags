@@ -59,6 +59,18 @@ export class NodeWalker {
                         tags,
                     })
                 }
+            } else {
+                // Top-level it() without a describe() block (common in vitest)
+                const itDescription = firstArgStringLiteral(node)
+                const tags = this.getTags(node.parent)
+                if (tags.length && itDescription) {
+                    this.results.push({
+                        fullyQualifiedName,
+                        name: toMethodNameStyle(itDescription),
+                        elementKind: 'FUNCTION',
+                        tags,
+                    })
+                }
             }
         }
 
@@ -79,14 +91,18 @@ export class NodeWalker {
 
     /**
      * Entry point of the class. Walks the entire tree of a typescript file.
-     * @param filePath
+     * @param filePath - Absolute or relative path to the file to read.
+     * @param fqnBase - Optional FQN prefix to use instead of the raw filePath.
+     *                  When supplied by TagsProcessor it is already a clean
+     *                  relative stem (e.g. "test_svcs"), so direct callers
+     *                  (unit tests) can omit it and get the legacy behaviour.
      * @returns
      */
-    walk(filePath: string) {
-        this.filePath = filePath
+    walk(filePath: string, fqnBase?: string) {
+        this.filePath = fqnBase ?? filePath
         const sourceFile = ts.createSourceFile(
-            this.filePath,
-            fs.readFileSync(this.filePath, 'utf-8'),
+            filePath,
+            fs.readFileSync(filePath, 'utf-8'),
             ts.ScriptTarget.ESNext,
             true
         )
