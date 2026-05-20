@@ -4,9 +4,6 @@ on:
   release:
     types: [created]
 
-permissions:
-  id-token: write
-
 jobs:
   check-release:
     uses: reqstool/.github/.github/workflows/common-check-release.yml@ec64e2df249d8a923d56688e61409b51ea0ca1e0 # main 2026-05-19
@@ -18,4 +15,6 @@ jobs:
     needs:
       - check-release
       - build
+    permissions:
+      id-token: write
     uses: reqstool/.github/.github/workflows/typescript-publish-to-npm.yml@a8d4620c14cca1e59e5d46fa0c12cefaf36e2bca # feat/typescript-trusted-publishing 2026-05-20
