@@ -15,6 +15,6 @@ jobs:
     needs:
       - check-release
       - build
-    uses: reqstool/.github/.github/workflows/typescript-publish-to-npm.yml@ec64e2df249d8a923d56688e61409b51ea0ca1e0 # main 2026-05-19
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    permissions:
+      id-token: write
+    uses: reqstool/.github/.github/workflows/typescript-publish-to-npm.yml@ba71d8039faae3a22e7956f09b7dc63ddc94c8b0 # main 2026-05-20
