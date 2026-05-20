@@ -17,4 +17,4 @@ jobs:
       - build
     permissions:
       id-token: write
-    uses: reqstool/.github/.github/workflows/typescript-publish-to-npm.yml@a8d4620c14cca1e59e5d46fa0c12cefaf36e2bca # feat/typescript-trusted-publishing 2026-05-20
+    uses: reqstool/.github/.github/workflows/typescript-publish-to-npm.yml@ba71d8039faae3a22e7956f09b7dc63ddc94c8b0 # main 2026-05-20
