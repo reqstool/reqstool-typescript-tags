@@ -5,6 +5,10 @@ on:
     paths:
       - ".github/renovate.json5"
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   validate:
     uses: reqstool/.github/.github/workflows/common-validate-renovate.yml@ec64e2df249d8a923d56688e61409b51ea0ca1e0 # main 2026-05-19
