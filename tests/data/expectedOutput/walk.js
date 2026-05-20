@@ -66,7 +66,7 @@ export const walkExpected = [
         ],
     },
     {
-        fullyQualifiedName: 'tests/data/directoryWithTsFiles/file.ts',
+        fullyQualifiedName: 'tests/data/directoryWithTsFiles/file.ts.RegularClass',
         elementKind: 'FUNCTION',
         name: 'functionInClass',
         tags: [
@@ -77,7 +77,7 @@ export const walkExpected = [
         ],
     },
     {
-        fullyQualifiedName: 'tests/data/directoryWithTsFiles/file.ts',
+        fullyQualifiedName: 'tests/data/directoryWithTsFiles/file.ts.RegularClass',
         elementKind: 'FUNCTION',
         name: 'arrowFunctionInClass',
         tags: [

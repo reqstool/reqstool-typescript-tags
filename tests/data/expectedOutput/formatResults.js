@@ -28,11 +28,11 @@ export const formatResultsExpected = {
                 },
                 {
                     elementKind: 'METHOD',
-                    fullyQualifiedName: 'tests/data/directoryWithTsFiles/file.ts.functionInClass',
+                    fullyQualifiedName: 'tests/data/directoryWithTsFiles/file.ts.RegularClass.functionInClass',
                 },
                 {
                     elementKind: 'METHOD',
-                    fullyQualifiedName: 'tests/data/directoryWithTsFiles/file.ts.arrowFunctionInClass',
+                    fullyQualifiedName: 'tests/data/directoryWithTsFiles/file.ts.RegularClass.arrowFunctionInClass',
                 },
                 {
                     elementKind: 'METHOD',
