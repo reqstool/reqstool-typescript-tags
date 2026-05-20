@@ -6,7 +6,7 @@
 
 # Reqstool TypeScript Tags
 
-A tool for creating [reqstool](https://github.com/reqstool/reqstool-client) `annotation.yml` files from TypeScript and JavaScript projects.
+A tool for creating [reqstool](https://github.com/reqstool/reqstool-client) `annotations.yml` files from TypeScript and JavaScript projects, and assembling a complete reqstool dataset package for distribution.
 
 ## Installation
 
@@ -16,21 +16,46 @@ npm install --save-dev @reqstool/reqstool-typescript-tags
 
 ## Usage
 
-Add a script to your `package.json`:
+### `tags` — generate annotations.yml
+
+Scans source files for JSDoc `@Requirements` and `@SVCs` tags and writes an `annotations.yml` file.
+
+```bash
+reqstool-typescript-tags tags --inputs src,tests --output docs/reqstool/annotations.yml
+```
+
+Add as a script in `package.json`:
 
 ```json
 {
   "scripts": {
-    "reqstool": "reqstool-typescript-tags --inputs tests,src --output docs/reqstool/annotations.yml"
+    "reqstool:tags": "reqstool-typescript-tags tags --inputs src,tests --output docs/reqstool/annotations.yml"
   }
 }
 ```
 
-Then run:
+### `package` — assemble a reqstool dataset package
+
+Assembles a complete reqstool dataset (annotations, requirements, test results) into a publishable npm package.
 
 ```bash
-npm run reqstool
+reqstool-typescript-tags package \
+  --inputs src,tests \
+  --dataset docs/reqstool \
+  --output build/reqstool-package
 ```
+
+Options:
+
+| Option | Description |
+|---|---|
+| `-i, --inputs <paths...>` | Source directories to scan for annotations (comma-separated) |
+| `-d, --dataset <dir>` | Directory containing `requirements.yml` and related dataset files |
+| `-r, --test-results <globs...>` | Glob patterns for JUnit XML test results (comma-separated) |
+| `-o, --output <dir>` | Output directory for the assembled package |
+| `-b, --build-tool <tool>` | Build tool to record in `reqstool_config.yml` (`npm`\|`yarn`\|`pnpm`\|`bun`) |
+| `-n, --name <string>` | Override the generated package name (default: `<pkg-name>-reqstool`) |
+| `-v, --pkg-version <string>` | Override the package version (default: from `package.json`) |
 
 ## Documentation
 
