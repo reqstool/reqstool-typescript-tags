@@ -1,0 +1,6 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "github>reqstool/.github:.github/renovate.json5",
+  ],
+}
