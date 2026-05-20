@@ -17,9 +17,9 @@ requirement_annotations:
       - elementKind: CLASS
         fullyQualifiedName: file.RegularClass
       - elementKind: METHOD
-        fullyQualifiedName: file.functionInClass
+        fullyQualifiedName: file.RegularClass.functionInClass
       - elementKind: METHOD
-        fullyQualifiedName: file.arrowFunctionInClass
+        fullyQualifiedName: file.RegularClass.arrowFunctionInClass
       - elementKind: METHOD
         fullyQualifiedName: file.asyncRegularFunction
   tests:

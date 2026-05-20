@@ -77,8 +77,14 @@ export class NodeWalker {
         if (ts.isClassDeclaration(node) || isFunction(node)) {
             const tags = this.getTags(node)
             if (tags.length > 0) {
+                // For class members (methods and arrow-function properties), include the
+                // class name in the FQN so the path is fileStem.ClassName.member.
+                const isClassMember =
+                    (ts.isMethodDeclaration(node) || ts.isPropertyDeclaration(node)) &&
+                    ts.isClassDeclaration(node.parent)
+                const enclosingClass = isClassMember ? getNodeName(node.parent) : undefined
                 this.results.push({
-                    fullyQualifiedName,
+                    fullyQualifiedName: enclosingClass ? `${fullyQualifiedName}.${enclosingClass}` : fullyQualifiedName,
                     elementKind: ts.isClassDeclaration(node) ? 'CLASS' : 'FUNCTION',
                     name: getNodeName(node),
                     tags,
