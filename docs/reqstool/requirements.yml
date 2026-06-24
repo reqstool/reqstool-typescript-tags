@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/reqstool/reqstool-client/main/src/reqstool/resources/schemas/v1/requirements.schema.json
+
+metadata:
+  urn: reqstool-typescript-tags
+  variant: microservice
+  title: Reqstool TypeScript Tags
+  url: https://github.com/reqstool/reqstool-typescript-tags
+
+requirements:
+  - id: TAGS_001
+    title: JSDoc tag scanning
+    significance: shall
+    description: >-
+      The library shall walk the AST of TypeScript/TSX source and test files and
+      collect every function, class, method, and test case (test/it/describe) carrying
+      a @Requirements or @SVCs JSDoc tag, along with its fully qualified name and
+      element kind.
+    categories:
+      - functional-suitability
+    revision: "0.1.0"
+
+  - id: TAGS_002
+    title: Tag aggregation and formatting
+    significance: shall
+    description: >-
+      The library shall aggregate scanned tag occurrences by ID, grouping
+      @Requirements occurrences under implementations and @SVCs occurrences under
+      tests, with each occurrence recording its element kind and fully qualified name.
+    categories:
+      - functional-suitability
+    revision: "0.1.0"
+
+  - id: TAGS_003
+    title: YAML export
+    significance: shall
+    description: >-
+      The library shall serialize aggregated tag data to an annotations.yml file, with
+      a JSON schema header comment, creating the destination directory if it does not
+      exist.
+    categories:
+      - functional-suitability
+    revision: "0.1.0"
+
+  - id: TAGS_004
+    title: Publishable reqstool npm package assembly
+    significance: shall
+    description: >-
+      The library shall assemble a separate, publishable "<package>-reqstool" npm
+      package directory containing the project's reqstool dataset
+      (requirements.yml, software_verification_cases.yml,
+      manual_verification_results.yml, when present), the generated annotations.yml,
+      any configured test result files, and a generated reqstool_config.yml -- so the
+      reqstool dataset never ships inside the consuming project's own npm package.
+    categories:
+      - functional-suitability
+    revision: "0.1.0"

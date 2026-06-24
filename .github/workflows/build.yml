@@ -12,6 +12,9 @@ on:
       - reopened
       - synchronize
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     uses: reqstool/.github/.github/workflows/typescript-lint.yml@ec64e2df249d8a923d56688e61409b51ea0ca1e0 # main 2026-05-19
@@ -19,3 +22,46 @@ jobs:
     needs:
       - lint
     uses: reqstool/.github/.github/workflows/typescript-build.yml@ec64e2df249d8a923d56688e61409b51ea0ca1e0 # main 2026-05-19
+
+  reqstool:
+    needs:
+      - lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        reqstool-source: [pypi, main]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+      - run: npm ci
+      - run: npm run build
+      - name: Run unit tests (writes build/test-results/junit-unit.xml)
+        run: npm test
+      - name: Run e2e tests (writes build/test-results/junit-e2e.xml)
+        run: npm run test:e2e
+      - name: Self-apply own tags processor to own src/tests
+        run: npm run reqstool:self-apply
+      - name: Install reqstool
+        uses: reqstool/.github/.github/actions/install-reqstool@9c6feaab046f4782f430dd2527fdb82c2a5cd926 # main 2026-06-22
+        with:
+          reqstool-source: ${{ matrix.reqstool-source }}
+      - name: Validate reqstool spec completeness
+        # not yet available in the latest PyPI release; supplementary to (not a
+        # replacement for) the `reqstool status --fail-if-incomplete` gate below, which
+        # is the actual required check on the pypi leg
+        if: matrix.reqstool-source == 'main'
+        uses: reqstool/.github/.github/actions/validate-reqstool@9c6feaab046f4782f430dd2527fdb82c2a5cd926 # main 2026-06-22
+      - name: Run reqstool status
+        # Required gate on both matrix legs -- fails the build unless every
+        # requirement is implemented and verified.
+        uses: reqstool/.github/.github/actions/reqstool-status@9c6feaab046f4782f430dd2527fdb82c2a5cd926 # main 2026-06-22
+        with:
+          fail-if-incomplete: "true"
+
+  validate-openspec:
+    uses: reqstool/.github/.github/workflows/common-validate-openspec.yml@9c6feaab046f4782f430dd2527fdb82c2a5cd926 # main 2026-06-22

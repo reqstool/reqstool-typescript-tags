@@ -4,6 +4,7 @@ import * as path from 'path'
 import { dump } from 'js-yaml'
 import { FormattedData, FunctionOrClassInfo, RequirementAnnotations } from '../types.js'
 import { NodeWalker } from './NodeWalker.js'
+import { toStem } from '../util/stem.js'
 
 export class TagsProcessor {
     yamlLanguageServer =
@@ -11,22 +12,29 @@ export class TagsProcessor {
 
     tagsToSearch = ['Requirements', 'SVCs']
 
+    /**
+     * Creates directory of provided filepath if it does not exist
+     *
+     * @param filepath - Filepath to check and create directory from.
+     * @Requirements TAGS_003
+     */
     createDirFromPath(filepath: string): void {
-        /**
-         * Creates directory of provided filepath if it does not exist
-         *
-         * @param filepath - Filepath to check and create directory from.
-         */
         const directory = path.dirname(filepath)
         if (!fs.existsSync(directory)) {
             fs.mkdirSync(directory, { recursive: true })
         }
     }
 
+    /**
+     * @Requirements TAGS_002
+     */
     async findTSFiles(directory: string): Promise<string[]> {
         return await fg([`${directory}/**/*.{ts,tsx}`])
     }
 
+    /**
+     * @Requirements TAGS_002
+     */
     formatResults(results: FunctionOrClassInfo[]): FormattedData {
         const implementations: RequirementAnnotations = {}
         const tests: RequirementAnnotations = {}
@@ -71,6 +79,7 @@ export class TagsProcessor {
      *
      * @param outputFile - The path to the output YAML file.
      * @param formattedData - The formatted data to be written to the YAML file.
+     * @Requirements TAGS_003
      */
     writeToYaml(outputFile: string, formattedData: FormattedData): void {
         try {
@@ -86,6 +95,9 @@ export class TagsProcessor {
         }
     }
 
+    /**
+     * @Requirements TAGS_002, TAGS_003
+     */
     async processTagsData(paths_to_files: string[], outputFile = 'output/annotations.yml') {
         const nodeWalker = new NodeWalker(this.tagsToSearch)
         let data: FunctionOrClassInfo[] = []
@@ -97,12 +109,7 @@ export class TagsProcessor {
                 const resolvedInput = path.resolve(inputPath)
                 const resolvedFile = path.resolve(filePath)
                 const rel = path.relative(resolvedInput, resolvedFile)
-                // Strip test/spec suffix and .ts/.tsx extension, convert separators to dots.
-                // e.g. "test_svcs.test.ts" → "test_svcs", "src/utils.ts" → "src.utils"
-                const stem = rel
-                    .replace(/\.(test|spec)\.(ts|tsx)$/, '')
-                    .replace(/\.(ts|tsx)$/, '')
-                    .replace(/[/\\]/g, '.')
+                const stem = toStem(rel)
                 data = [...data, ...nodeWalker.walk(filePath, stem)]
             }
         }
