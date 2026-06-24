@@ -27,10 +27,8 @@ afterAll(() => {
     fs.rmSync(tmpDir, { recursive: true, force: true })
 })
 
-// Test titles are plain identifiers (no spaces): the reqstool JUnit matcher derives a
-// verifying-test's fully qualified name from the JUnit classname + the leading identifier
-// run of the testcase name, so the title must already be the identifier we want recorded
-// against the @SVCs tag below.
+// The tagged test's title below is a plain identifier, not a BDD-style sentence — see
+// vitest.classname-template.ts for why.
 
 /**
  * @SVCs SVC_TAGS_004
@@ -100,7 +98,7 @@ test('should_assemble_a_complete_reqstool_package_from_the_fixture_project', asy
     expect(packResult.status, `npm pack failed: ${packResult.stderr}`).toBe(0)
 })
 
-test('should fail with a clear error when requirements.yml is missing', () => {
+test('should_fail_with_a_clear_error_when_requirements_yml_is_missing', () => {
     const emptyDataset = path.join(tmpDir, 'empty-dataset')
     fs.mkdirSync(emptyDataset)
 

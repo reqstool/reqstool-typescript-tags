@@ -4,6 +4,7 @@ import * as path from 'path'
 import { dump } from 'js-yaml'
 import { FormattedData, FunctionOrClassInfo, RequirementAnnotations } from '../types.js'
 import { NodeWalker } from './NodeWalker.js'
+import { toStem } from '../util/stem.js'
 
 export class TagsProcessor {
     yamlLanguageServer =
@@ -66,9 +67,6 @@ export class TagsProcessor {
         return formattedData
     }
 
-    /**
-     * @Requirements TAGS_002
-     */
     private mapType(elementKind: string): string {
         if (elementKind === 'FUNCTION') {
             return 'METHOD'
@@ -111,12 +109,7 @@ export class TagsProcessor {
                 const resolvedInput = path.resolve(inputPath)
                 const resolvedFile = path.resolve(filePath)
                 const rel = path.relative(resolvedInput, resolvedFile)
-                // Strip test/spec suffix and .ts/.tsx extension, convert separators to dots.
-                // e.g. "test_svcs.test.ts" → "test_svcs", "src/utils.ts" → "src.utils"
-                const stem = rel
-                    .replace(/\.(test|spec)\.(ts|tsx)$/, '')
-                    .replace(/\.(ts|tsx)$/, '')
-                    .replace(/[/\\]/g, '.')
+                const stem = toStem(rel)
                 data = [...data, ...nodeWalker.walk(filePath, stem)]
             }
         }

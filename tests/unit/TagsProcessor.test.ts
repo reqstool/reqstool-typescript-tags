@@ -4,10 +4,8 @@ import * as yaml from 'js-yaml'
 import { TagsProcessor } from '../../src/processors/TagsProcessor'
 import { FormattedData } from '../../src/types'
 
-// Test titles are plain identifiers (no spaces) rather than BDD-style sentences: the
-// reqstool JUnit matcher derives a verifying-test's fully qualified name from the JUnit
-// classname + the leading identifier run of the testcase name, so the title must already
-// be the identifier we want recorded against the @SVCs tag below.
+// Test titles below are plain identifiers, not BDD-style sentences — see
+// vitest.classname-template.ts for why.
 
 /**
  * @SVCs SVC_TAGS_003

@@ -1,5 +1,7 @@
 // @reqstool-openspec-hooks: 0.1.1
 import { spawn, ChildProcess } from 'child_process'
+// openspecui is resolved by the OpenSpec CLI's own runtime at hook-load time — not an npm
+// dependency of this package, so it's intentionally absent from package.json.
 import type { OnReadDocumentHookV1 } from 'openspecui/hooks'
 
 // Minimal MCP client over stdio (JSON-RPC 2.0, newline-delimited).
