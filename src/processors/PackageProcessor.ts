@@ -11,6 +11,9 @@ const REQSTOOL_CONFIG_SCHEMA =
 
 const VALID_BUILD_TOOLS: BuildTool[] = ['npm', 'yarn', 'pnpm', 'bun']
 
+/**
+ * @Requirements TAGS_004
+ */
 export class PackageProcessor {
     resolveOptions(cliOptions: Partial<PackageOptions>): PackageOptions {
         let pkgConfig: ReqstoolPackageConfig = {}

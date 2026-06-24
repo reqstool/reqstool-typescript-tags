@@ -5,6 +5,8 @@ import ts from 'typescript'
 /**
  * Searches the tree of a TypeScript file for specific
  * JSDoc tags and their description text.
+ *
+ * @Requirements TAGS_001
  */
 export class NodeWalker {
     private results: FunctionOrClassInfo[] = []

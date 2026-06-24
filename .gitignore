@@ -251,4 +251,5 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node,intellij+all,visualstudiocode
 
 # Claude Code
-.claude/
+.claude/*
+!.claude/settings.json

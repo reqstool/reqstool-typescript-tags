@@ -11,22 +11,29 @@ export class TagsProcessor {
 
     tagsToSearch = ['Requirements', 'SVCs']
 
+    /**
+     * Creates directory of provided filepath if it does not exist
+     *
+     * @param filepath - Filepath to check and create directory from.
+     * @Requirements TAGS_003
+     */
     createDirFromPath(filepath: string): void {
-        /**
-         * Creates directory of provided filepath if it does not exist
-         *
-         * @param filepath - Filepath to check and create directory from.
-         */
         const directory = path.dirname(filepath)
         if (!fs.existsSync(directory)) {
             fs.mkdirSync(directory, { recursive: true })
         }
     }
 
+    /**
+     * @Requirements TAGS_002
+     */
     async findTSFiles(directory: string): Promise<string[]> {
         return await fg([`${directory}/**/*.{ts,tsx}`])
     }
 
+    /**
+     * @Requirements TAGS_002
+     */
     formatResults(results: FunctionOrClassInfo[]): FormattedData {
         const implementations: RequirementAnnotations = {}
         const tests: RequirementAnnotations = {}
@@ -59,6 +66,9 @@ export class TagsProcessor {
         return formattedData
     }
 
+    /**
+     * @Requirements TAGS_002
+     */
     private mapType(elementKind: string): string {
         if (elementKind === 'FUNCTION') {
             return 'METHOD'
@@ -71,6 +81,7 @@ export class TagsProcessor {
      *
      * @param outputFile - The path to the output YAML file.
      * @param formattedData - The formatted data to be written to the YAML file.
+     * @Requirements TAGS_003
      */
     writeToYaml(outputFile: string, formattedData: FormattedData): void {
         try {
@@ -86,6 +97,9 @@ export class TagsProcessor {
         }
     }
 
+    /**
+     * @Requirements TAGS_002, TAGS_003
+     */
     async processTagsData(paths_to_files: string[], outputFile = 'output/annotations.yml') {
         const nodeWalker = new NodeWalker(this.tagsToSearch)
         let data: FunctionOrClassInfo[] = []

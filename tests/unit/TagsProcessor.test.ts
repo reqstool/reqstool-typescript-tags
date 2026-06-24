@@ -1,52 +1,64 @@
-import { describe, expect, it } from 'vitest'
+import { expect, test } from 'vitest'
 import fs from 'fs'
 import * as yaml from 'js-yaml'
 import { TagsProcessor } from '../../src/processors/TagsProcessor'
 import { FormattedData } from '../../src/types'
 
-describe('TagsProcessor', () => {
-    it('should write data to a YAML file', () => {
-        const instance = new TagsProcessor()
-        const data: FormattedData = {
-            requirement_annotations: {
-                implementations: {},
-                tests: {},
-            },
-        }
-        const outputFile = 'test_output.yml'
+// Test titles are plain identifiers (no spaces) rather than BDD-style sentences: the
+// reqstool JUnit matcher derives a verifying-test's fully qualified name from the JUnit
+// classname + the leading identifier run of the testcase name, so the title must already
+// be the identifier we want recorded against the @SVCs tag below.
 
-        instance.writeToYaml(outputFile, data)
+/**
+ * @SVCs SVC_TAGS_003
+ */
+test('should_write_data_to_a_yaml_file', () => {
+    const instance = new TagsProcessor()
+    const data: FormattedData = {
+        requirement_annotations: {
+            implementations: {},
+            tests: {},
+        },
+    }
+    const outputFile = 'test_output.yml'
 
-        const fileContent = fs.readFileSync(outputFile, 'utf8')
-        const parsedContent = yaml.load(fileContent)
+    instance.writeToYaml(outputFile, data)
 
-        expect(parsedContent).toEqual(data)
+    const fileContent = fs.readFileSync(outputFile, 'utf8')
+    const parsedContent = yaml.load(fileContent)
 
-        fs.unlinkSync(outputFile)
-    })
+    expect(parsedContent).toEqual(data)
 
-    it('should find all ts and tsx files in a directory tree', async () => {
-        const instance = new TagsProcessor()
-        const response = await instance.findTSFiles('./tests/data/directoryWithTsFiles')
+    fs.unlinkSync(outputFile)
+})
 
-        expect(response).includes('./tests/data/directoryWithTsFiles/file.ts')
-        expect(response).includes('./tests/data/directoryWithTsFiles/subdirectory/subdirectoryFile.tsx')
-        expect(response).not.includes('./tests/data/directoryWithTsFiles/file.txt')
-    })
+/**
+ * @SVCs SVC_TAGS_002
+ */
+test('should_find_all_ts_and_tsx_files_in_a_directory_tree', async () => {
+    const instance = new TagsProcessor()
+    const response = await instance.findTSFiles('./tests/data/directoryWithTsFiles')
 
-    it('should process all files in a directory completely', async () => {
-        const outputFile = 'annotations.yml'
-        const instance = new TagsProcessor()
-        await instance.processTagsData(['./tests/data/directoryWithTsFiles'], outputFile)
+    expect(response).includes('./tests/data/directoryWithTsFiles/file.ts')
+    expect(response).includes('./tests/data/directoryWithTsFiles/subdirectory/subdirectoryFile.tsx')
+    expect(response).not.includes('./tests/data/directoryWithTsFiles/file.txt')
+})
 
-        const fileContent = fs.readFileSync(outputFile, 'utf8')
-        const parsedContent = yaml.load(fileContent)
+/**
+ * @SVCs SVC_TAGS_001
+ */
+test('should_process_all_files_in_a_directory_completely', async () => {
+    const outputFile = 'annotations.yml'
+    const instance = new TagsProcessor()
+    await instance.processTagsData(['./tests/data/directoryWithTsFiles'], outputFile)
 
-        const expectedFileContent = fs.readFileSync('./tests/data/expectedOutput/processTagsData.yml', 'utf8')
-        const parsedExpectedContent = yaml.load(expectedFileContent)
+    const fileContent = fs.readFileSync(outputFile, 'utf8')
+    const parsedContent = yaml.load(fileContent)
 
-        expect(parsedContent).toEqual(parsedExpectedContent)
+    const expectedFileContent = fs.readFileSync('./tests/data/expectedOutput/processTagsData.yml', 'utf8')
+    const parsedExpectedContent = yaml.load(expectedFileContent)
 
-        fs.unlinkSync(outputFile)
-    })
+    expect(parsedContent).toEqual(parsedExpectedContent)
+
+    fs.unlinkSync(outputFile)
 })
