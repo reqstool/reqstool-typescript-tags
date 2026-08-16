@@ -105,6 +105,7 @@ jobs:
     with:
       ref: ${{ needs.prepare.outputs.version }}
       version: ${{ needs.prepare.outputs.version }}
+      environment: stable
 
   # Last, deliberately. Everything above can fail, and until this runs nothing
   # resolving "the latest release" can see what was built -- the release is still
