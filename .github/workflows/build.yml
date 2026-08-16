@@ -2,6 +2,25 @@ name: Build
 
 on:
   workflow_call:
+    inputs:
+      ref:
+        description: "Branch, tag or SHA to build. Empty = the caller's ref."
+        required: false
+        type: string
+        default: ""
+      version:
+        description: "Stamp package.json with this version before building. Empty = leave as-is."
+        required: false
+        type: string
+        default: ""
+      artifact-name:
+        description: >
+          Name to upload the build output under. The release flow runs this
+          workflow twice in one run -- once on the branch, once on the tag -- and
+          upload-artifact rejects a duplicate name.
+        required: false
+        type: string
+        default: "dist"
   workflow_dispatch:
   push:
     branches:
@@ -21,7 +40,13 @@ jobs:
   build:
     needs:
       - lint
-    uses: reqstool/.github/.github/workflows/typescript-build.yml@ec64e2df249d8a923d56688e61409b51ea0ca1e0 # main 2026-05-19
+    # @main rather than a SHA: this needs the ref/version/artifact-name inputs
+    # added for the release flow. Re-pin once they have been through a release.
+    uses: reqstool/.github/.github/workflows/typescript-build.yml@main
+    with:
+      ref: ${{ inputs.ref }}
+      version: ${{ inputs.version }}
+      artifact-name: ${{ inputs.artifact-name || 'dist' }}
 
   reqstool:
     needs:
@@ -32,9 +57,14 @@ jobs:
       matrix:
         reqstool-source: [pypi, main]
     steps:
+      # Full history and tags: the release flow derives the version from git state, so a
+      # shallow clone would build the wrong number rather than fail.
       - uses: actions/checkout@v7
         with:
+          persist-credentials: false
           fetch-depth: 0
+          fetch-tags: true
+          ref: ${{ inputs.ref || github.ref }}
       - uses: actions/setup-node@v7
         with:
           node-version: "24"
