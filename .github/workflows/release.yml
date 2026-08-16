@@ -101,6 +101,10 @@ jobs:
     needs: [prepare, assets]
     uses: reqstool/.github/.github/workflows/typescript-publish-to-npm.yml@main
     permissions:
+      # That workflow checks the repo out to build before publishing, so it
+      # declares contents: read -- and a callee may not request more than it is
+      # granted. Omitting this rejects the run before any job starts.
+      contents: read
       id-token: write
     with:
       ref: ${{ needs.prepare.outputs.version }}
