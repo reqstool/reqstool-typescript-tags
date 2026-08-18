@@ -59,15 +59,15 @@ jobs:
     steps:
       # Full history and tags: the release flow derives the version from git state, so a
       # shallow clone would build the wrong number rather than fail.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
           fetch-tags: true
           ref: ${{ inputs.ref || github.ref }}
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7.0.0
         with:
-          node-version: "24"
+          node-version: "24.19.0"
       - run: npm ci
       - run: npm run build
       - name: Run unit tests (writes build/test-results/junit-unit.xml)
