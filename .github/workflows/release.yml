@@ -96,6 +96,9 @@ jobs:
     with:
       version: ${{ needs.prepare.outputs.version }}
       artifact: dist-tagged
+      # The tarball typescript-build.yml packs -- the only name in the artifact
+      # carrying the version, and better to attach than six loose .js files.
+      pattern: "*.tgz"
 
   publish-to-npm:
     needs: [prepare, assets]
