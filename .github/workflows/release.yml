@@ -41,7 +41,7 @@ permissions:
 
 jobs:
   prepare:
-    uses: reqstool/.github/.github/workflows/common-release-prepare.yml@ef815eae0bca7160cdc714126cac73f76d638b39 # 1.0.0
+    uses: reqstool/.github/.github/workflows/common-release-prepare.yml@a4203a58cec87861655512b6b277a859db385796 # 1.1.0
     permissions:
       contents: read
     with:
@@ -67,7 +67,7 @@ jobs:
   tag:
     needs: [prepare, checks]
     if: ${{ !inputs.dry-run }}
-    uses: reqstool/.github/.github/workflows/common-release-tag.yml@ef815eae0bca7160cdc714126cac73f76d638b39 # 1.0.0
+    uses: reqstool/.github/.github/workflows/common-release-tag.yml@a4203a58cec87861655512b6b277a859db385796 # 1.1.0
     permissions:
       contents: write
     with:
@@ -90,7 +90,7 @@ jobs:
 
   assets:
     needs: [prepare, build-tagged]
-    uses: reqstool/.github/.github/workflows/common-release-assets.yml@ef815eae0bca7160cdc714126cac73f76d638b39 # 1.0.0
+    uses: reqstool/.github/.github/workflows/common-release-assets.yml@a4203a58cec87861655512b6b277a859db385796 # 1.1.0
     permissions:
       contents: write
     with:
@@ -102,7 +102,7 @@ jobs:
 
   publish-to-npm:
     needs: [prepare, assets]
-    uses: reqstool/.github/.github/workflows/typescript-publish-to-npm.yml@ef815eae0bca7160cdc714126cac73f76d638b39 # 1.0.0
+    uses: reqstool/.github/.github/workflows/typescript-publish-to-npm.yml@a4203a58cec87861655512b6b277a859db385796 # 1.1.0
     permissions:
       # That workflow checks the repo out to build before publishing, so it
       # declares contents: read -- and a callee may not request more than it is
@@ -130,7 +130,7 @@ jobs:
   promote:
     needs: [prepare, assets, publish-to-npm]
     if: ${{ !inputs.dry-run && !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
-    uses: reqstool/.github/.github/workflows/common-release-promote.yml@ef815eae0bca7160cdc714126cac73f76d638b39 # 1.0.0
+    uses: reqstool/.github/.github/workflows/common-release-promote.yml@a4203a58cec87861655512b6b277a859db385796 # 1.1.0
     permissions:
       contents: write
     with:
