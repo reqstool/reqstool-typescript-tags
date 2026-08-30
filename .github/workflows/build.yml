@@ -65,7 +65,7 @@ jobs:
           ref: ${{ inputs.ref || github.ref }}
       - uses: actions/setup-node@v7.0.0
         with:
-          node-version: "24.19.0"
+          node-version: "24.20.0"
       - run: npm ci
       - run: npm run build
       - name: Run unit tests (writes build/test-results/junit-unit.xml)
