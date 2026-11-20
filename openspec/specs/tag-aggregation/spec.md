@@ -12,4 +12,5 @@ reqstool requirement and SVC IDs only; titles and descriptions are injected at r
 The system SHALL implement TAGS_002.
 
 #### Scenario: SVC_TAGS_002
-The system SHALL pass SVC_TAGS_002.
+- **WHEN** SVC_TAGS_002 is run
+- **THEN** it passes
