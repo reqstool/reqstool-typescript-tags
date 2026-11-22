@@ -36,60 +36,49 @@ permissions:
 
 jobs:
   lint:
-    uses: reqstool/.github/.github/workflows/typescript-lint.yml@6fc8d3e3d4c3fdf7a83cb7b7a274e4761486ca71 # 1.2.1
+    uses: reqstool/.github/.github/workflows/typescript-lint.yml@ci/385-shared-python-build # SPIKE: pin to release SHA
+
   build:
-    needs:
-      - lint
-    uses: reqstool/.github/.github/workflows/typescript-build.yml@6fc8d3e3d4c3fdf7a83cb7b7a274e4761486ca71 # 1.2.1
+    needs: lint
+    uses: reqstool/.github/.github/workflows/typescript-build.yml@ci/385-shared-python-build # SPIKE: pin to release SHA
     with:
       ref: ${{ inputs.ref }}
       version: ${{ inputs.version }}
       artifact-name: ${{ inputs.artifact-name || 'dist' }}
+      # e2e runs the compiled dist/index.js, so it follows the build; the
+      # self-applied tags land in build/reqstool/ next to the junit output.
+      post-test-command: |
+        npm run test:e2e
+        npm run reqstool:self-apply
 
   reqstool:
-    needs:
-      - lint
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        reqstool-source: [pypi, main]
-    steps:
-      # Full history and tags: the release flow derives the version from git state, so a
-      # shallow clone would build the wrong number rather than fail.
-      - uses: actions/checkout@v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-          fetch-tags: true
-          ref: ${{ inputs.ref || github.ref }}
-      - uses: actions/setup-node@v7.1.0
-        with:
-          node-version: "26.13.1"
-      - run: npm ci
-      - run: npm run build
-      - name: Run unit tests (writes build/test-results/junit-unit.xml)
-        run: npm test
-      - name: Run e2e tests (writes build/test-results/junit-e2e.xml)
-        run: npm run test:e2e
-      - name: Self-apply own tags processor to own src/tests
-        run: npm run reqstool:self-apply
-      - name: Install reqstool
-        uses: reqstool/.github/.github/actions/install-reqstool@6fc8d3e3d4c3fdf7a83cb7b7a274e4761486ca71 # 1.2.1
-        with:
-          reqstool-source: ${{ matrix.reqstool-source }}
-      - name: Validate reqstool spec completeness
-        # not yet available in the latest PyPI release; supplementary to (not a
-        # replacement for) the `reqstool status --fail-if-incomplete` gate below, which
-        # is the actual required check on the pypi leg
-        if: matrix.reqstool-source == 'main'
-        uses: reqstool/.github/.github/actions/validate-reqstool@6fc8d3e3d4c3fdf7a83cb7b7a274e4761486ca71 # 1.2.1
-      - name: Run reqstool status
-        # Required gate on both matrix legs -- fails the build unless every
-        # requirement is implemented and verified.
-        uses: reqstool/.github/.github/actions/reqstool-status@6fc8d3e3d4c3fdf7a83cb7b7a274e4761486ca71 # 1.2.1
-        with:
-          fail-if-incomplete: "true"
+    needs: build
+    uses: reqstool/.github/.github/workflows/common-reqstool-verify.yml@ci/385-shared-python-build # SPIKE: pin to release SHA
+    with:
+      build-artifact: ${{ inputs.artifact-name || 'dist' }}-build
+
+  smoke:
+    needs: build
+    uses: reqstool/.github/.github/workflows/typescript-smoke.yml@ci/385-shared-python-build # SPIKE: pin to release SHA
+    with:
+      # Unit and e2e tests on Windows/macOS: path separators, line endings and
+      # encoding only show against fixture files on those platforms.
+      command: |
+        npm run build
+        npm test
+        npm run test:e2e
 
   validate-openspec:
     uses: reqstool/.github/.github/workflows/common-validate-openspec.yml@6fc8d3e3d4c3fdf7a83cb7b7a274e4761486ca71 # 1.2.1
+
+  # Single stable required check: survives job renames and matrix changes.
+  ci:
+    if: ${{ always() }}
+    needs: [lint, build, reqstool, smoke, validate-openspec]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail unless every needed job succeeded
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: |
+          echo "$NEEDS" | python3 -c 'import json,sys; r={k:v["result"] for k,v in json.load(sys.stdin).items()}; print(r); sys.exit(0 if all(v=="success" for v in r.values()) else 1)'
