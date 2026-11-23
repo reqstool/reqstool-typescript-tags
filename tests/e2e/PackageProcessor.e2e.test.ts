@@ -97,7 +97,6 @@ test('should_assemble_a_complete_reqstool_package_from_the_fixture_project', asy
     const packResult = spawnSync('npm', ['pack', '--dry-run', outDir], {
         cwd: tmpDir,
         encoding: 'utf8',
-        // npm is npm.cmd on Windows, which spawn can only run through a shell
         shell: process.platform === 'win32',
     })
     expect(packResult.status, `npm pack failed: ${packResult.stderr}`).toBe(0)
