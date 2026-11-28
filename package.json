@@ -37,7 +37,7 @@
         "prettier": "3.10.1",
         "ts-node": "10.9.2",
         "typescript-eslint": "8.74.0",
-        "vitest": "5.1.1"
+        "vitest": "5.1.2"
     },
     "dependencies": {
         "commander": "15.1.0",
