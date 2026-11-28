@@ -11,4 +11,4 @@ permissions:
 
 jobs:
   validate:
-    uses: reqstool/.github/.github/workflows/common-validate-renovate.yml@ff7323b2f1214898e8f3191ffab3d8bdf478f208 # 1.3.1
+    uses: reqstool/.github/.github/workflows/common-validate-renovate.yml@ea3dbab0d008dc916896835d211f9238d0a4b113 # 1.3.2
